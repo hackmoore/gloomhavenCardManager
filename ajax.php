@@ -1,17 +1,6 @@
 <?php
-	// DEBUGGING
-	ini_set('display_errors', 1);
-	ini_set('display_startup_errors', 1);
-	error_reporting(E_ALL);
-
-
-
 	// Starter stuff
-	require 'config.php';
-	session_start();
-	foreach (glob("classes/*.php") as $filename)
-    	include $filename;
-	
+	require 'config.php';	
 
 	// Check for stupid
 	if( !isset($_GET['action']) ){
@@ -34,7 +23,8 @@
 		if( !isset($_GET['partyCode']) )
 			returnJson("Invalid party code", false);
 
-		returnJson(db_getSessionPlayers($_GET['partyCode']));
+		$players = db::getSessionPlayers($_GET['partyCode']);
+		returnJson($players, (count($players) > 0));
 
 
 	}else if( $_GET['action'] == "join" ){
@@ -43,7 +33,7 @@
 		if( !isset($_POST['playerid']) )
 			returnJson("Invalid player id", false);
 
-		$players = db_getSessionPlayers($_POST['partyCode']);
+		$players = db::getSessionPlayers($_POST['partyCode']);
 		$player = false;
 		foreach($players as $p){
 			if( $p['id'] == $_POST['playerid'] ){
@@ -56,6 +46,13 @@
 
 		// Record the user to join the session
 		$_SESSION['partyid'] = $player['sid'];
-		$_SESSION['playerid'] = $player['id'];
+		$_SESSION['player'] = db::getPlayer($_POST['playerid'])[0];
 		returnJson("Loading Session");
+
+	}else if( $_GET['action'] == "getClassCards"){
+		if( !isset($_GET['classid']) )
+			returnJson("Invalid class id", false);
+
+		$cards = db::getClassCards($_GET['classid']);
+		returnJson($cards);
 	}

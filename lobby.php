@@ -1,3 +1,12 @@
+<?php
+	require 'config.php';
+	$cards = db::getPlayerCards($_SESSION['player']['id']);
+
+	if( count($cards) === 0 ){
+		header("Location: selectDeck.php");
+		exit();
+	}
+?>
 <!DOCTYPE html> 
 <html> 
 
@@ -9,7 +18,11 @@
 	<!-- Stylesheets -->
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" integrity="sha256-rByPlHULObEjJ6XQxW/flG2r+22R5dKiAoef+aXWfik=" crossorigin="anonymous" />
-	<link rel="stylesheet" href="css/style.css">
+	<style>
+		.bootbox button[data-dismiss="modal"]{
+			display: none;
+		}
+	</style>
 
 	<!-- Scripts -->
 	<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
@@ -18,9 +31,8 @@
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/5.4.0/bootbox.min.js"></script>
 </head>
 
-<body> 
+<body>
 	<div class="container h-100"> 
-		<h1 class="text-center">Gloomhaven Hand Manager</h1> 
 		<div class="d-flex h-100"> 
 			<div class="align-self-center mx-auto"> 
 				<button type="button" class="btn btn-success">Create Party</button>
@@ -30,40 +42,7 @@
 	</div> 
 
 	<script>
-	    $("#joinParty").click(function(){
-	    	bootbox.prompt("This is the default prompt!", function(result){
-			    if(!result){
-			    	return;
-			    }
-
-		    	$.getJSON("ajax.php?action=getSession",{'partyCode': result}, function(response){
-		    		console.log(response);
-		    		if( response.success !== true ){
-		    			alert("Invalid join code.");
-		    			return;
-		    		}
-
-		    		let players = [];
-		    		$.each(response.data, function(index, value){
-		    			players.push({'text': value.name + " (" + value.ClassName + ")", 'value': value.id});
-		    		});
-
-		    		bootbox.prompt({
-					    title: "Please select your character",
-					    inputType: 'radio',
-					    inputOptions: players,
-					    callback: function (playerid) {
-					        $.post("ajax.php?action=join", {'partyCode': result, 'playerid': playerid}, function(response){
-					        	if( response.success )
-					        		window.location = "lobby.php";
-					        	else
-					        		alert("Failed to load session");
-					        });
-					    }
-					});
-		    	});
-			});
-	    });
+	    
 	</script>
 </body> 
 

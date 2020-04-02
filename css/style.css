@@ -1,0 +1,54 @@
+.bootbox button[data-dismiss="modal"]{
+	display: none;
+}
+
+body{
+	background-color: rgb(65,65,45);
+	background-image: url('../images/background.jpg');
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+
+.container{
+	background: rgba(255,255,255,0.75);
+	padding: 10px 20px;
+}
+
+.card{
+	display: inline-block;
+	width: 200px;
+	height: 280px;
+	border-radius: 5px;
+	border: 1px solid #DDDDDD;
+	background-size: cover;
+	
+	margin-right: 5px;
+
+	/* Fading */
+	-webkit-transition: all 0.30s ease-in-out;
+	-moz-transition: all 0.30s ease-in-out;
+	-ms-transition: all 0.30s ease-in-out;
+	-o-transition: all 0.30s ease-in-out;
+}
+
+.card.unselected{
+	box-shadow: 0 0 5px #dc3545;
+	border: 2px solid #dc3545;
+}
+
+.card.selected{
+	box-shadow: 0 0 5px #28a745;
+	border: 2px solid #28a745;
+}
+
+/*
+.card.selected:after{
+	color: #28a745!important;
+	font-size: 100%;
+	float: right;
+	padding: 15px;
+	content: "✓";
+
+	background: #DDD;
+}
+*/

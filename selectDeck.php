@@ -1,3 +1,7 @@
+<?php
+	require("config.php");
+
+?>
 <!DOCTYPE html> 
 <html> 
 
@@ -16,53 +20,40 @@
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/5.4.0/bootbox.min.js"></script>
+	<script type="text/javascript" src="js/main.js"></script>
 </head>
 
-<body> 
+<body data-classid="<?php echo $_SESSION['player']['classid']; ?>" data-playerid="<?php echo $_SESSION['player']['id']; ?>" data-level="<?php echo $_SESSION['player']['level']; ?>">
 	<div class="container h-100"> 
 		<h1 class="text-center">Gloomhaven Hand Manager</h1> 
 		<div class="d-flex h-100"> 
-			<div class="align-self-center mx-auto"> 
-				<button type="button" class="btn btn-success">Create Party</button>
-				<button type="button" class="btn btn-primary" id="joinParty">Join Party</button>
+			<div class="align-self-center mx-auto">
+				<div class="spinner-grow" role="status" id="cardLoader">
+					<span class="sr-only">Loading...</span>
+				</div>
+
+				<div id="cards"></div>
 			</div>
 		</div> 
 	</div> 
 
 	<script>
-	    $("#joinParty").click(function(){
-	    	bootbox.prompt("This is the default prompt!", function(result){
-			    if(!result){
-			    	return;
-			    }
+		let cards = [];
+	    $(function(){
+	    	$.getJSON("ajax.php?action=getClassCards", {classid: $("body").data('classid')}, function(response){
+	    		$.each(response.data, function(i,v){
+	    			if( v.level <= $('body').data('level') ){
+	    				console.log(v);
+	    				generateCard("#cards", v, true);
+	    			}
+	    		});
 
-		    	$.getJSON("ajax.php?action=getSession",{'partyCode': result}, function(response){
-		    		console.log(response);
-		    		if( response.success !== true ){
-		    			alert("Invalid join code.");
-		    			return;
-		    		}
 
-		    		let players = [];
-		    		$.each(response.data, function(index, value){
-		    			players.push({'text': value.name + " (" + value.ClassName + ")", 'value': value.id});
-		    		});
-
-		    		bootbox.prompt({
-					    title: "Please select your character",
-					    inputType: 'radio',
-					    inputOptions: players,
-					    callback: function (playerid) {
-					        $.post("ajax.php?action=join", {'partyCode': result, 'playerid': playerid}, function(response){
-					        	if( response.success )
-					        		window.location = "lobby.php";
-					        	else
-					        		alert("Failed to load session");
-					        });
-					    }
-					});
-		    	});
-			});
+	    		// Allow all cards to be selected
+	    		$(".card").click(function(){
+					$(this).toggleClass('selected');
+				});
+	    	});
 	    });
 	</script>
 </body> 
