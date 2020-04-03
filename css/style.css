@@ -7,10 +7,12 @@ body{
 	background-image: url('../images/background.jpg');
 	background-repeat: no-repeat;
 	background-size: cover;
+
+	color: #CCC;
 }
 
 .container{
-	background: rgba(255,255,255,0.75);
+	background: rgba(0,0,0,0.75);
 	padding: 10px 20px;
 }
 
@@ -22,7 +24,7 @@ body{
 	border: 1px solid #DDDDDD;
 	background-size: cover;
 	
-	margin-right: 5px;
+	margin: 5px;
 
 	/* Fading */
 	-webkit-transition: all 0.30s ease-in-out;
@@ -39,6 +41,10 @@ body{
 .card.selected{
 	box-shadow: 0 0 5px #28a745;
 	border: 2px solid #28a745;
+}
+
+h1{
+	color: rgb(255,255,255);
 }
 
 /*

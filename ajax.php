@@ -47,6 +47,7 @@
 		// Record the user to join the session
 		$_SESSION['partyid'] = $player['sid'];
 		$_SESSION['player'] = db::getPlayer($_POST['playerid'])[0];
+		$_SESSION['class'] = db::getClass($_SESSION['player']['classid'])[0];
 		returnJson("Loading Session");
 
 	}else if( $_GET['action'] == "getClassCards"){

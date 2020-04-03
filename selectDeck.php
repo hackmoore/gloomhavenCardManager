@@ -25,12 +25,15 @@
 
 <body data-classid="<?php echo $_SESSION['player']['classid']; ?>" data-playerid="<?php echo $_SESSION['player']['id']; ?>" data-level="<?php echo $_SESSION['player']['level']; ?>">
 	<div class="container h-100"> 
-		<h1 class="text-center">Gloomhaven Hand Manager</h1> 
+		<h1 class="text-center">Select your cards</h1>
 		<div class="d-flex h-100"> 
 			<div class="align-self-center mx-auto">
-				<div class="spinner-grow" role="status" id="cardLoader">
+				<div class="spinner-grow text-light" role="status" id="cardLoader">
 					<span class="sr-only">Loading...</span>
 				</div>
+
+				<p><b>Card allowed:</b> <span id="cardsAllowed"><?php echo $_SESSION['class']['handSize']; ?></span></p>
+				<p><b>Cards Selected:</b> <span id="cardSelected">xx</span></p>
 
 				<div id="cards"></div>
 			</div>
@@ -41,16 +44,21 @@
 		let cards = [];
 	    $(function(){
 	    	$.getJSON("ajax.php?action=getClassCards", {classid: $("body").data('classid')}, function(response){
+	    		$("#cardLoader").remove();
 	    		$.each(response.data, function(i,v){
 	    			if( v.level <= $('body').data('level') ){
 	    				console.log(v);
-	    				generateCard("#cards", v, true);
+	    				generateCard("#cards", v.id, true);
 	    			}
 	    		});
 
-
 	    		// Allow all cards to be selected
 	    		$(".card").click(function(){
+	    			const cardsAllowed = $("#cardsAllowed").text();
+	    			const cardsSelected = $(".card.selected").length;
+
+	    			console.log(cardsAllowed);
+	    			console.log(cardsSelected);
 					$(this).toggleClass('selected');
 				});
 	    	});

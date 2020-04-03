@@ -189,6 +189,12 @@
 				WHERE pl.id = '%s';", $playerid);
 		}
 
+		public static function getClass(int $classid){
+			return static::runQuery("SELECT cl.*
+				FROM classes cl
+				WHERE cl.id = '%s';", $classid);
+		}
+
 		public static function getPlayerCards(int $playerid){
 			return static::runQuery("SELECT ca.id, ca.name, ca.initiative, ca.level
 				FROM cards ca
